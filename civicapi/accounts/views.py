@@ -43,12 +43,31 @@ def login_view(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def dashboard(request):
-    role = request.user.role
-    if role == 'admin':
-        data = {'dashboard': 'Admin Dashboard Data'}
-    elif role == 'superadmin':
-        data = {'dashboard': 'SuperAdmin Dashboard Data'}
-    else:
-        data = {'dashboard': 'User Dashboard Data'}
-    return Response(data)
+    try:
+        # Check if user has 'role' attribute
+        if not hasattr(request.user, 'role'):
+            return Response(
+                {"error": "User role not found. Please contact the administrator."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+        role = request.user.role
+
+        # Dashboard data based on role
+        if role == 'admin':
+            data = {'dashboard': 'Admin Dashboard Data'}
+        elif role == 'superadmin':
+            data = {'dashboard': 'SuperAdmin Dashboard Data'}
+        else:
+            data = {'dashboard': 'User Dashboard Data'}
+
+        return Response(data, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        # Catch any unexpected error
+        return Response(
+            {"error": f"An unexpected error occurred: {str(e)}"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 
