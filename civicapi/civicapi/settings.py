@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "corsheaders",
     'accounts',
-    'reports',
+    'civicapi.reports',
 
     'rest_framework',
     'rest_framework.authtoken',
