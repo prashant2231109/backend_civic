@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: civic-api
+    env: python
+    buildCommand: "pip install --upgrade pip && pip install -r requirements-minimal.txt"
+    startCommand: "cd civicapi && python manage.py migrate && gunicorn civicapi.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: PIP_NO_CACHE_DIR
+        value: 1
